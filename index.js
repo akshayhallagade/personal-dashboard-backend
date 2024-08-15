@@ -4,6 +4,7 @@ require("dotenv").config();
 const express = require("express");
 const mongoose = require("mongoose");
 const userRoutes = require("./route/user");
+const { authenticationHeader } = require("./middleware/authentication");
 
 //variables
 const PORT = process.env.PORT;
@@ -13,6 +14,7 @@ if (!PORT) throw new Error("PORT not available");
 
 //middleware
 app.use(express.json());
+app.use(authenticationHeader());
 
 //Database Connection
 mongoose
@@ -20,7 +22,7 @@ mongoose
   .then(() => console.log("MongoDB Connected !"));
 
 //Routes
-app.get("/", (req, res) => res.json({ msg: "Ok" }));
+app.get("/", (req, res) => res.json({ msg: "This is the homepage." }));
 
 app.use("/api/v1/user", userRoutes); //user routes
 

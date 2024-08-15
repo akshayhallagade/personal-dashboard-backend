@@ -53,10 +53,13 @@ const handleLogIn = async (req, res) => {
     if (!userData)
       res.status(404).json({ message: "Credential Didn't Matched." });
 
-    // DB data  ===  with Password
+    //Mathcing Password
     const { hashedPassword } = lib.generateHashed(password, userData.salt);
-    if (hashedPassword === userData.password)
-      return res.json({ message: "Log In Successfully", userData });
+    if (hashedPassword === userData.password) {
+      // Generating Token
+      const token = lib.generateUserToken({ id: userData._id.toString() });
+      return res.json({ message: "Log In Successfully", userData, token });
+    }
 
     return res.json({ message: "Server Error" });
   } catch (error) {
